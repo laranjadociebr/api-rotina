@@ -1,3 +1,5 @@
+using ApiTarefas.Data;
+using ApiTarefas.Models;
 public class RotinaTarefasServices
 {
     private readonly AppDbContext _context;
