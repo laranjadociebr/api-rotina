@@ -17,6 +17,21 @@ namespace MinhaPrimeiraApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
+            modelBuilder.Entity("ApiTarefas.Models.Rotina", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NomeRotina")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rotinas");
+                });
+
             modelBuilder.Entity("ApiTarefas.Models.Tarefa", b =>
                 {
                     b.Property<int>("Id")
@@ -41,57 +56,34 @@ namespace MinhaPrimeiraApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("RotinaId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("TarefaSelecionada")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RotinaId");
+
                     b.ToTable("Tarefas");
                 });
 
-            modelBuilder.Entity("RotinaTarefas", b =>
+            modelBuilder.Entity("ApiTarefas.Models.Tarefa", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.HasOne("ApiTarefas.Models.Rotina", "Rotina")
+                        .WithMany("Tarefas")
+                        .HasForeignKey("RotinaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("Alarme")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Navigation("Rotina");
+                });
 
-                    b.Property<DateTime>("DataHorarioFinal")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DataHorarioInicial")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DiasSemana")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Duracao")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Localizacao")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NomeTarefa")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TipoTarefa")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("WidgetAtivado")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RotinasTarefas");
+            modelBuilder.Entity("ApiTarefas.Models.Rotina", b =>
+                {
+                    b.Navigation("Tarefas");
                 });
 #pragma warning restore 612, 618
         }

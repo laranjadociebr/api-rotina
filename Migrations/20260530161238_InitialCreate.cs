@@ -12,24 +12,16 @@ namespace MinhaPrimeiraApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "RotinasTarefas",
+                name: "Rotinas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    NomeTarefa = table.Column<string>(type: "TEXT", nullable: false),
-                    TipoTarefa = table.Column<string>(type: "TEXT", nullable: false),
-                    DataHorarioInicial = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DataHorarioFinal = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DiasSemana = table.Column<string>(type: "TEXT", nullable: false),
-                    Duracao = table.Column<string>(type: "TEXT", nullable: false),
-                    Localizacao = table.Column<string>(type: "TEXT", nullable: false),
-                    Alarme = table.Column<string>(type: "TEXT", nullable: false),
-                    WidgetAtivado = table.Column<bool>(type: "INTEGER", nullable: false)
+                    NomeRotina = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RotinasTarefas", x => x.Id);
+                    table.PrimaryKey("PK_Rotinas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -38,6 +30,7 @@ namespace MinhaPrimeiraApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    RotinaId = table.Column<int>(type: "INTEGER", nullable: false),
                     NomeTarefa = table.Column<string>(type: "TEXT", nullable: false),
                     TarefaSelecionada = table.Column<string>(type: "TEXT", nullable: false),
                     HorarioInicio = table.Column<TimeSpan>(type: "TEXT", nullable: false),
@@ -48,17 +41,28 @@ namespace MinhaPrimeiraApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tarefas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tarefas_Rotinas_RotinaId",
+                        column: x => x.RotinaId,
+                        principalTable: "Rotinas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tarefas_RotinaId",
+                table: "Tarefas",
+                column: "RotinaId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RotinasTarefas");
+                name: "Tarefas");
 
             migrationBuilder.DropTable(
-                name: "Tarefas");
+                name: "Rotinas");
         }
     }
 }
