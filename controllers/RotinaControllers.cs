@@ -39,5 +39,56 @@ namespace ApiTarefas.Controllers
 
             return Ok(rotinas);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarRotina(int id)
+        {
+            var rotina = await _context.Rotinas.FindAsync(id);
+
+            if (rotina == null)
+            {
+                return NotFound();
+            }
+
+            _context.Rotinas.Remove(rotina);
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizarRotina(
+    int id,
+    [FromBody] Rotina rotinaAtualizada
+)
+        {
+            var rotinaExistente = await _context.Rotinas
+                .Include(r => r.Tarefas)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (rotinaExistente == null)
+            {
+                return NotFound();
+            }
+
+            // Atualiza nome da rotina
+            rotinaExistente.NomeRotina =
+                rotinaAtualizada.NomeRotina;
+
+            // REMOVE tarefas antigas
+            _context.Tarefas.RemoveRange(
+                rotinaExistente.Tarefas
+            );
+
+            // ADICIONA tarefas novas
+            rotinaExistente.Tarefas =
+                rotinaAtualizada.Tarefas;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(rotinaExistente);
+        }
+
     }
 }

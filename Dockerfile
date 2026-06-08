@@ -8,7 +8,7 @@
 
 # ---------- Estágio 1: Build ----------
 # Imagem base com SDK do .NET (permite compilar e publicar)
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copiar o arquivo de projeto e restaurar dependências (NuGet)
@@ -23,7 +23,7 @@ RUN dotnet publish "MinhaPrimeiraApi.csproj" -c Release -o /app/publish --no-res
 
 # ---------- Estágio 2: Run ----------
 # Imagem final só com o runtime (menor; não inclui SDK)
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS run
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS run
 WORKDIR /app
 
 # Copiar apenas o resultado do publish do estágio build
