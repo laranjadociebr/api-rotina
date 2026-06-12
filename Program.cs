@@ -18,7 +18,21 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=tarefas.db"));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Liberado",
+        policy =>
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
+
+app.UseCors("Liberado");
 
 app.UseSwagger();
 
